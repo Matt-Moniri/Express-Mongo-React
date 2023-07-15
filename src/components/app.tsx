@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContestList from "./contest-list";
-import Header from "./header";
 import Contest from "./contest";
 
 const App = ({ initialData }) => {
@@ -11,9 +10,24 @@ const App = ({ initialData }) => {
     "contestId default",
   );
   const navigateToContest = (contestId) => {
+    window.history.pushState(
+      { contestId },
+      "",
+      `contests/${contestId}`,
+    );
     setPage("contest");
     setContestId(contestId);
   };
+  useEffect(() => {
+    window.onpopstate = (event) => {
+      let newPage: "contest" | "contestList" = event.state
+        ?.contestId
+        ? "contest"
+        : "contestList";
+      setPage(newPage);
+      setContestId(event.state?.contestId);
+    };
+  }, []);
   return (
     <div className="container">
       {page == "contestList" && (

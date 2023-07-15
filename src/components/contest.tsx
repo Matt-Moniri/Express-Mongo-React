@@ -13,7 +13,7 @@ const Contest = ({ contestId }) => {
     <>
       <Header message={contest.contestName} />
       <div className="contest">
-        <div className="title">Contest Descriptionn</div>
+        <div className="title">Contest Description</div>
         <div className="description">{contest.description}</div>
       </div>
     </>
