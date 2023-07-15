@@ -10,6 +10,7 @@ export const connectClient = async () => {
   }
 
   const client = new MongoClient(MONGODB_URI);
+  console.log("going to mongo");
   await client.connect();
   await client.db(DATABASE_NAME).command({ ping: 1 });
   console.info("Connected to MongoDB");

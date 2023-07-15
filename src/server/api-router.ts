@@ -23,7 +23,8 @@ router.get("/contests", async (req, res) => {
   res.send({ contests });
 });
 
-router.get("/contest/:contestId", async (req, res) => {
+router.get("/contests/:contestId", async (req, res) => {
+  console.log("api invoked by contestID");
   const client = await connectClient();
 
   const contest = await client
