@@ -4,11 +4,9 @@ import Contest from "./contest";
 
 const App = ({ initialData }) => {
   const [page, setPage] = useState<"contestList" | "contest">(
-    "contestList",
+    initialData.contest ? "contest" : "contestList",
   );
-  const [contestId, setContestId] = useState(
-    "contestId default",
-  );
+  const [contest, setContest] = useState(initialData.contest);
   const navigateToContest = (contestId) => {
     window.history.pushState(
       { contestId },
@@ -16,7 +14,7 @@ const App = ({ initialData }) => {
       `contests/${contestId}`,
     );
     setPage("contest");
-    setContestId(contestId);
+    setContest({ id: contestId });
   };
   useEffect(() => {
     window.onpopstate = (event) => {
@@ -25,18 +23,18 @@ const App = ({ initialData }) => {
         ? "contest"
         : "contestList";
       setPage(newPage);
-      setContestId(event.state?.contestId);
+      setContest({ id: event.state?.contestId });
     };
   }, []);
   return (
     <div className="container">
       {page == "contestList" && (
         <ContestList
-          initialContests={initialData.contests}
+          initialContests={initialData.contestList}
           navigateToContest={navigateToContest}
         />
       )}
-      {page == "contest" && <Contest contestId={contestId} />}
+      {page == "contest" && <Contest contest={contest} />}
     </div>
   );
 };
