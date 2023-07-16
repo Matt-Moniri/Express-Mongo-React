@@ -4,11 +4,13 @@ import Header from "./header";
 
 const Contest = ({ contest }) => {
   const [contestUsed, setContestUsed] = useState<any>(contest);
-  // useEffect(() => {
-  //   fetchOneContest(contestId).then((receivedContest) => {
-  //     setContest(receivedContest);
-  //   });
-  // }, [contestId]);
+  useEffect(() => {
+    if (!contest.names) {
+      fetchOneContest(contest.id).then((receivedContest) => {
+        setContestUsed(receivedContest);
+      });
+    }
+  }, [contest.id, contest.names]);
   return (
     <>
       <Header message={contestUsed.contestName} />
