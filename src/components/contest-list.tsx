@@ -6,13 +6,17 @@ import ContestPreview from "./contest-preview";
 import Header from "./header";
 
 const ContestList = ({ initialContests, navigateToContest }) => {
-  const [contests, setContests] = useState(initialContests);
+  const [contests, setContests] = useState(
+    initialContests ?? [],
+  );
 
   useEffect(() => {
-    // fetchContests().then((contests) => {
-    //   setContests(contests);
-    // });
-  }, []);
+    if (!initialContests) {
+      fetchContests().then((contests) => {
+        setContests(contests);
+      });
+    }
+  }, [initialContests]);
 
   return (
     <div className="contest-list">

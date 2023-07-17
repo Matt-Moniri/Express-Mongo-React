@@ -16,6 +16,12 @@ const App = ({ initialData }) => {
     setPage("contest");
     setContest({ id: contestId });
   };
+  const navigateToContestList = () => {
+    window.history.pushState("contestList", "", `/`);
+    setPage("contestList");
+    console.log("navigate To List executed");
+    setContest(undefined);
+  };
   useEffect(() => {
     window.onpopstate = (event) => {
       let newPage: "contest" | "contestList" = event.state
@@ -34,7 +40,12 @@ const App = ({ initialData }) => {
           navigateToContest={navigateToContest}
         />
       )}
-      {page == "contest" && <Contest contest={contest} />}
+      {page == "contest" && (
+        <Contest
+          contest={contest}
+          navigateToContestList={navigateToContestList}
+        />
+      )}
     </div>
   );
 };
