@@ -5,6 +5,7 @@ import { connectClient } from "./db";
 
 const router = express.Router();
 router.use(cors());
+router.use(express.json());
 
 router.get("/contests", async (req, res) => {
   const client = await connectClient();
@@ -24,7 +25,6 @@ router.get("/contests", async (req, res) => {
 });
 
 router.get("/contests/:contestId", async (req, res) => {
-  console.log("api invoked by contestID");
   const client = await connectClient();
 
   const contest = await client
@@ -32,6 +32,57 @@ router.get("/contests/:contestId", async (req, res) => {
     .findOne({ id: req.params.contestId });
 
   res.send({ contest });
+});
+
+router.post("/contests/:contestId", async (req, res) => {
+  const client = await connectClient();
+  let aa = await req;
+  if (aa) {
+    console.log("--------------- received");
+  }
+
+  const { newNameValue } = await req.body;
+  console.log({ contestID: req.params.contestId });
+  const document = await client
+    .collection("contests")
+    .findOneAndUpdate(
+      { id: req.params.contestId },
+      {
+        $push: {
+          names: {
+            id: newNameValue.toLowerCase().replace(/\s/g, "-"),
+            name: newNameValue,
+            timestamp: new Date(),
+          },
+        },
+      },
+      { returnDocument: "after" },
+    );
+
+  res.send({ updatedContest: document.value });
+});
+
+router.post("/contests", async (req, res) => {
+  const client = await connectClient();
+
+  let { contestName, contestCategory, contestDescription } =
+    req.body;
+
+  const { insertedId } = await client
+    .collection("contests")
+    .insertOne(
+      {
+        id: contestName.toLowerCase().replace(/\s/g, "-"),
+        contestName: contestName,
+        categoryName: contestCategory,
+        description: contestDescription,
+      },
+      { returnDocument: "after" },
+    );
+  const addedContest = await client
+    .collection("contests")
+    .findOne({ _id: insertedId });
+  res.send({ addedContest });
 });
 
 export default router;
