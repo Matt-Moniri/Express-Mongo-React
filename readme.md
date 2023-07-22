@@ -7,8 +7,10 @@ This project is about creating an Express+MongoDB backend with a React frontend.
 ## To initialise the project
 
 1- install docker-desktop
+
 2- on CLI enter: docker-compose up
 now you have a mongoDB server and it is running
+
 3- enter:
 npx tsnd src/dev/load-test-data
 this command creates a sample collection in MongoDB
